@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<script>
+    'use strict';
+
+//    var arr = [2,5,1,3,1,2,1,7,7,6,5,9,0,1,0,0,20,18,5,20,0,1,0,1];
+//     var arr = [2, 5, 1, 3, 1, 2, 1, 7, 7, 6]; // 17
+     var arr = [2, 1, 5, 0, 3, 4, 7, 2, 3, 1, 0]; // 10
+    // var arr = [7, 0, 1, 3, 4, 1, 2, 1] // 9
+    // var arr = [2, 1, 5, 0, 3, 4, 7, 2, 3, 1, 0] // 10
+    // var arr = [2, 2, 1, 2, 2, 3, 0, 1, 2] // 4
+    // var arr = [2, 1, 5, 0, 3, 4, 7, 2, 3, 1, 8] // 24
+    // var arr = [2, 2, 2, 2, 2] // 0
+
+    function countWater(arr) {
+        var left = 0,
+            right = arr.length - 1,
+            leftMax = arr[left],
+            rightMax = arr[right],
+            volume = 0,
+            height;
+
+        while (left < right) {
+            if (leftMax < rightMax) {
+                height = arr[++left];
+                leftMax = Math.max(leftMax, height);
+                volume += leftMax - height;
+            } else {
+                height = arr[--right];
+                rightMax = Math.max(rightMax, height);
+                volume += rightMax - height;
+            }
+        }
+
+        console.log(volume);
+        return volume;
+    }
+
+    countWater(arr);
+</script>
+</body>
+</html>
