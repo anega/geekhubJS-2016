@@ -1,0 +1,1 @@
+Array.prototype.mySort = function (compareFunction) {};
