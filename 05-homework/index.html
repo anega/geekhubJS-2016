@@ -6,9 +6,16 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+
+    <script src="script.js"></script>
 </head>
 <body>
 
-<script src="script.js"></script>
+<form onsubmit="return false;">
+    <input id="new-todo" type="text" placeholder="add new todo">
+    <button type="button" onclick="addTodo()">Add Todo</button>
+</form>
+
+<ul id="todo-list"></ul>
 </body>
 </html>
