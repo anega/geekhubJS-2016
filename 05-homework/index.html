@@ -9,6 +9,17 @@
 </head>
 <body>
 
+<form onsubmit="return false;">
+    <input id="todo-text" type="text">
+    <button onclick="addTodo()">Add todo</button>
+</form>
+
+<p>Total todo count: <span id="all-todos">0</span></p>
+<p>Todos checked: <span id="checked-todos">0</span></p>
+<br>
+<br>
+<ul id="todo-list"></ul>
+
 <script src="script.js"></script>
 </body>
 </html>
