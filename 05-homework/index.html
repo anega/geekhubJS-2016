@@ -12,10 +12,15 @@
 <body>
 
 <form onsubmit="return false;">
-    <input id="new-todo" type="text" placeholder="add new todo">
-    <button type="button" onclick="addTodo()">Add Todo</button>
+    <input id="todo-text" type="text" autofocus>
+    <button onclick="addTodo()">Add todo</button>
 </form>
 
+<p>Total todo count: <span id="all-todos">0</span></p>
+<p>Todos checked: <span id="selected-todos">0</span></p>
+<br>
 <ul id="todo-list"></ul>
+
+<script src="script.js"></script>
 </body>
 </html>
