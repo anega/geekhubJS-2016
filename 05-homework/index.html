@@ -9,13 +9,12 @@
 </head>
 <body>
 
-<form onsubmit="return false;">
+<form id="todo-form">
     <input id="todo-text" type="text" autofocus>
-    <button onclick="addTodo()">Add todo</button>
+    <input type="submit" value="Add todo">
 </form>
 
-<p>Total todo count: <span id="all-todos">0</span></p>
-<p>Todos checked: <span id="selected-todos">0</span></p>
+<p>Selected todos: <span id="selected-todo-amount" onclick="checkTodo(event)">0</span></p>
 <br>
 <ul id="todo-list"></ul>
 

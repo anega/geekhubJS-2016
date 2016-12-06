@@ -1,47 +1,65 @@
-var input = document.getElementById('todo-text'),
-    todoList = document.getElementById('todo-list'),
-    allTodos = document.getElementById('all-todos'),
-    selectedTodos = document.getElementById('selected-todos'),
-    totalTodoCount = 0,
-    selectedCount = 0;
+// (function () {
 
-// Add todoItem logic
-function addTodo() {
-    var trimmedTodoText = input.value.trim(),
-        textNode = document.createTextNode(trimmedTodoText),
-        checkbox = document.createElement('input'),
-        removeBtn = document.createElement('button'),
-        todoLi = document.createElement('li');
-    checkbox.type = 'checkbox';
-    removeBtn.type = 'button';
-    removeBtn.innerHTML = 'Remove todo';
+    var todos = [],
+        todoForm = document.getElementById('todo-form'),
+        todoList = document.getElementById('todo-list'),
+        checkedTodos = 0;
 
-    // Remove todoItem logic
-    removeBtn.onclick = function (event) {
-        var removedTodo = event.target.parentElement,
-            isSelected = removedTodo.getElementsByTagName('input')[0].checked;
-        removedTodo.parentElement.removeChild(removedTodo);
-        allTodos.innerHTML = --totalTodoCount;
-        if (isSelected) selectedTodos.innerHTML = --selectedCount;
-    };
-
-    checkbox.addEventListener('change', function (event) {
-        selectedCount = this.checked ? ++selectedCount : selectedCount > 0 ? --selectedCount : selectedCount;
-        selectedTodos.innerHTML = selectedCount;
-    });
-
-    if (trimmedTodoText) {
-        todoLi.appendChild(checkbox);
-        todoLi.appendChild(textNode);
-        todoLi.appendChild(removeBtn);
-        todoList.appendChild(todoLi);
-        allTodos.innerHTML = ++totalTodoCount;
+    // TodoItem constructor
+    function Todo(name) {
+        this.name = name;
+        this.completed = false;
     }
 
-    input.value = '';
-    input.focus();
-}
+    // Add TodoItem
+    function addTodo(name) {
+        var newTodo = new Todo(name);
+        todos.push(newTodo);
+    }
 
-document.addEventListener('keyup', function (event) {
-    if (event.keyCode == 13) addTodo();
-});
+    // Validate TodoItem
+    function todoValidation(val) {
+        return val.trim();
+    }
+
+    // Remove TodoItem
+    function removeTodo(ev) {
+        var removedTodo = ev.target.parentElement;
+        removedTodo.parentElement.removeChild(removedTodo);
+    }
+
+    // Amount of checked TodoItems
+    function checkTodo(ev) {
+        ev.target.checked ? ++checkedTodos : --checkedTodos;
+        document.getElementById('selected-todo-amount').innerHTML = checkedTodos + '';
+    }
+
+    // Show Todos list
+    function listTodos() {
+        var len = todos.length,
+            i = 0,
+            html = '';
+
+        for (; i < len; i++) {
+            html += '<li><input type="checkbox" onclick="checkTodo(event)"/> ' + todos[i].name + ' <button class="remove-todo" onclick="removeTodo(event)">x</button></li>';
+        }
+
+        todoList.innerHTML = html;
+    }
+
+    // Add TodoItem form submission event, show in todos list
+    todoForm.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+
+        var currTodo = document.getElementById('todo-text');
+        var currTodoVal = document.getElementById('todo-text').value;
+
+        if (todoValidation(currTodoVal)) {
+            addTodo(currTodoVal);
+            listTodos();
+        }
+        currTodo.value = '';
+        currTodo.focus();
+    });
+
+// }());
