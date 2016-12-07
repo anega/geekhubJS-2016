@@ -10,22 +10,9 @@ function Todo(name) {
 // Add TodoItem
 function addTodo(name) {
     var newTodo = new Todo(name);
-    var li = document.createElement('li');
-    var checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.onclick = checkTodo;
-    var span = document.createElement('span'),
-        todoName = document.createTextNode(newTodo.name);
-    var removeBtn = document.createElement('button');
-        removeBtn.type = 'button';
-        removeBtn.innerHTML = 'x';
-        removeBtn.onclick = removeTodo;
 
-    li.appendChild(checkbox);
-    span.appendChild(todoName);
-    li.appendChild(span);
-    li.appendChild(removeBtn);
-    todoList.appendChild(li);
+    saveTodo(newTodo);
+    listTodos();
 }
 
 // Validate TodoItem
@@ -35,16 +22,62 @@ function todoValidation(val) {
 
 // Remove TodoItem
 function removeTodo(ev) {
-    var removedTodo = ev.target.parentElement;
-    removedTodo.parentElement.removeChild(removedTodo);
-    checkTodo(ev);
+    var todos = getTodos(),
+        removedTodoItem = ev.target.parentElement.getAttribute('id');
+
+    todos.splice(removedTodoItem, 1);
+    localStorage.setItem('todos', JSON.stringify(todos));
+
+    listTodos();
 }
 
 // Amount of checked TodoItems
 function checkTodo(ev) {
-    var checkedTodos = document.querySelectorAll('input[type=checkbox]:checked');
-    document.getElementById('selected-todo-amount').innerHTML = checkedTodos.length + '';
+    var todos = getTodos(),
+        todoId = ev.target.parentElement.getAttribute('id');
+
+    todos[todoId].completed = ev.target.checked;
+    localStorage.setItem('todos', JSON.stringify(todos));
 }
+
+// Get TodoList from localStorage
+function getTodos() {
+    var todosStr = localStorage.getItem('todos');
+
+    return todosStr ? JSON.parse(todosStr) : [];
+}
+
+// Save TodoItem to localStorage
+function saveTodo(addedTodo) {
+    var todos = getTodos();
+
+    todos.push(addedTodo);
+    localStorage.setItem('todos', JSON.stringify(todos));
+}
+
+// List all Todos saved in localStorage
+function listTodos() {
+    var todos = getTodos(),
+        i = 0,
+        len = todos.length,
+        html = '',
+        todoChecked = '';
+
+    for (;i < len; i++) {
+        if (todos[i].completed) {
+            todoChecked = 'checked';
+        } else {
+            todoChecked = '';
+        }
+
+        html += '<li id="' + i + '"><input type="checkbox" onclick="checkTodo(event)" ' + todoChecked + '> ' + todos[i].name + ' <button onclick="removeTodo(event)">x</button></li>';
+    }
+
+    todoList.innerHTML = html;
+}
+
+// Init list all Todos
+listTodos();
 
 // Add TodoItem form submission event, show in todos list
 todoForm.addEventListener('submit', function (ev) {
