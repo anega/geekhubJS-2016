@@ -23,11 +23,12 @@ function todoValidation(val) {
 // Remove TodoItem
 function removeTodo(ev) {
     var todos = getTodos(),
-        removedTodoItem = ev.target.parentElement.getAttribute('id');
+        removedTodoItem = +ev.target.parentElement.getAttribute('id');
 
     todos.splice(removedTodoItem, 1);
     localStorage.setItem('todos', JSON.stringify(todos));
 
+    appendCompletedTodosCount();
     listTodos();
 }
 
@@ -38,6 +39,22 @@ function checkTodo(ev) {
 
     todos[todoId].completed = ev.target.checked;
     localStorage.setItem('todos', JSON.stringify(todos));
+
+    appendCompletedTodosCount();
+}
+
+function appendCompletedTodosCount() {
+    var todos = getTodos(),
+        i = todos.length,
+        checkedTodoCount = 0;
+
+    for (;i--;) {
+        if (todos[i].completed) {
+            ++checkedTodoCount;
+        }
+    }
+    checkedTodoCount = checkedTodoCount || 0;
+    document.getElementById('selected-todo-amount').innerHTML = checkedTodoCount + '';
 }
 
 // Get TodoList from localStorage
@@ -77,6 +94,7 @@ function listTodos() {
 }
 
 // Init list all Todos
+appendCompletedTodosCount();
 listTodos();
 
 // Add TodoItem form submission event, show in todos list
