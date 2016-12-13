@@ -72,6 +72,24 @@ function saveTodo(addedTodo) {
     localStorage.setItem('todos', JSON.stringify(todos));
 }
 
+function reindexTodos() {
+    var todoList = [],
+        todoLiList = document.querySelectorAll('li'),
+        todoName,
+        todoCompleted,
+        i = 0,
+        len = todoLiList.length;
+
+    for (;i < len; i++) {
+        todoName = todoLiList[i].childNodes[1].textContent.trim();
+        todoCompleted = todoLiList[i].childNodes[0].checked;
+
+        todoList.push({name: todoName, completed: todoCompleted});
+    }
+
+    localStorage.setItem('todos', JSON.stringify(todoList));
+}
+
 // List all Todos saved in localStorage
 function listTodos() {
     var todos = getTodos(),
@@ -87,7 +105,7 @@ function listTodos() {
             todoChecked = '';
         }
 
-        html += '<li id="' + i + '"><input type="checkbox" onclick="checkTodo(event)" ' + todoChecked + '> ' + todos[i].name + ' <button onclick="removeTodo(event)">x</button></li>';
+        html += '<li id="' + i + '" draggable="true" ondragstart="handleDragStart(event)" ondragover="handleDragOver(event)" ondrop="handleDrop(event)"><input type="checkbox" onclick="checkTodo(event)" ' + todoChecked + '> ' + todos[i].name + ' <button onclick="removeTodo(event)">x</button></li>';
     }
 
     todoList.innerHTML = html;
@@ -110,3 +128,34 @@ todoForm.addEventListener('submit', function (ev) {
     currTodo.value = '';
     currTodo.focus();
 });
+
+// DnD logic
+var dragEl = null;
+
+function handleDragStart(ev) {
+    dragEl = ev.target;
+    ev.dataTransfer.effectAllowed = 'move';
+    ev.dataTransfer.setData('qqq', dragEl.innerHTML);
+}
+
+function handleDragOver(ev) {
+    ev.preventDefault();
+
+    ev.dataTransfer.dropEffect = 'move';
+
+    return false;
+}
+
+function handleDrop(ev) {
+    ev.stopPropagation();
+
+    if (dragEl != ev.target) {
+        dragEl.innerHTML = ev.target.innerHTML;
+        ev.target.innerHTML = ev.dataTransfer.getData('qqq');
+    }
+
+    // Save reindexed TodoList to localStorage
+    reindexTodos();
+
+    return false;
+}
