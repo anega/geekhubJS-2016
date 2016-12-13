@@ -135,7 +135,7 @@ var dragEl = null;
 function handleDragStart(ev) {
     dragEl = ev.target;
     ev.dataTransfer.effectAllowed = 'move';
-    ev.dataTransfer.setData('qqq', dragEl.innerHTML);
+    ev.dataTransfer.setData('draggedItem', dragEl.innerHTML);
 }
 
 function handleDragOver(ev) {
@@ -151,7 +151,7 @@ function handleDrop(ev) {
 
     if (dragEl != ev.target) {
         dragEl.innerHTML = ev.target.innerHTML;
-        ev.target.innerHTML = ev.dataTransfer.getData('qqq');
+        ev.target.innerHTML = ev.dataTransfer.getData('draggedItem');
     }
 
     // Save reindexed TodoList to localStorage
